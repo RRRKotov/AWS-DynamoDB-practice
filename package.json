@@ -5,7 +5,8 @@
   "main": "app.ts",
   "scripts": {
     "node": "cd node && npm run start",
-    "client": "cd client && npm run start"
+    "client": "cd client && npm run start",
+    "install-modules": "npm i && cd client && npm i && cd ../node && npm i"
   },
   "author": "Roman Kotov",
   "license": "ISC",
