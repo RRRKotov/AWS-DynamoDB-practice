@@ -1,10 +1,4 @@
-export interface IForm {
-  firstName: string;
-  lastName: string;
-  hobby: string;
-  id?: number;
-}
-
+import { IForm } from "../../../types.d";
 export interface IEntityForm {
   id?: string;
   entityForEdit?: IForm;

@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from "react";
 import "./EntityTable.css";
-import axios from "axios";
 import { TableProps } from "./EntityTable.d";
 import { Button } from "../../../common/Button/Button";
 import { tableFields } from "./TableFields";
 import { useHistory } from "react-router-dom";
-import { IForm } from "../../../common/EntityForm/EntityForm.d";
+import { entityApi } from "../../../../api/entityApi";
+import { IForm } from "../../../../types.d";
+
 
 export const EntityTable = React.forwardRef<HTMLTableElement, TableProps>(
   () => {
     const history = useHistory();
-    const [entityList, setEntityList] = useState([]);
+    const [entityList, setEntityList] = useState<IForm[]>([]);
+    const fetchEntities = async () => {
+      const { data } = await entityApi.getEntities()
+      setEntityList(data.Items)
+    }
     useEffect(() => {
-      axios.get("http://localhost:5000/getentitylist").then((response) => {
-        setEntityList(response.data);
-      });
+      fetchEntities()
     }, []);
 
-    const EditTheEntity = (id: number) => {
-      history.push(`/editing/${id}`);
+    const editTheEntity = (id: IForm["id"]) => {
+      history.push(`/editing/${ id }`);
     };
+
+    const deleteTheEntity = (id: IForm["id"]) => { 
+      entityApi.deleteEntity(id).then(() => {
+        fetchEntities()
+      })
+    
+    }
 
     return (
       <table className="table">
@@ -30,7 +40,7 @@ export const EntityTable = React.forwardRef<HTMLTableElement, TableProps>(
             })}
           </tr>
 
-          {entityList.map((item: Required<IForm>) => {
+          {entityList.map((item: IForm) => {
             const { id, firstName, lastName, hobby } = item;
 
             return (
@@ -41,13 +51,13 @@ export const EntityTable = React.forwardRef<HTMLTableElement, TableProps>(
                 <td>
                   <Button
                     onClick={() => {
-                      EditTheEntity(id);
+                      editTheEntity(id);
                     }}
                     value="Edit"
                   />
                   <Button
-                    onClick={() => {
-                      console.log(id);
+                    onClick={() => { 
+                      deleteTheEntity(id)
                     }}
                     value="Delete"
                   />

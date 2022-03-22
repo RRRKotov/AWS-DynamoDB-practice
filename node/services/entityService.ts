@@ -11,22 +11,23 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = "People";
 
-interface IEntity {
+export interface IEntity {
   firstName: string;
   lastName: string;
   hobby: string;
+  id?: string;
 }
 
-class EntityService {
-  public async getEntities() {
+export const entityService = {
+  async getEntities() {
     const params = {
       TableName: TABLE_NAME,
     };
-    const characters = await dynamoClient.scan(params).promise();
-    return characters;
-  }
+    const entities = await dynamoClient.scan(params).promise();
+    return entities;
+  },
 
-  public async getEntityById(id: string) {
+  async getEntityById(id: string) {
     const params = {
       TableName: TABLE_NAME,
       Key: {
@@ -34,17 +35,17 @@ class EntityService {
       },
     };
     return await dynamoClient.get(params).promise();
-  }
+  },
 
-  public async addOrUpdateEntity(entity: IEntity) {
+  async addOrUpdateEntity(entity: IEntity) {
     const params = {
       TableName: TABLE_NAME,
       Item: entity,
     };
     return await dynamoClient.put(params).promise();
-  }
+  },
 
-  public async deleteEntity(id: string) {
+  async deleteEntity(id: string) {
     const params = {
       TableName: TABLE_NAME,
       Key: {
@@ -52,7 +53,6 @@ class EntityService {
       },
     };
     return await dynamoClient.delete(params).promise();
-  }
-}
+  },
+};
 
-export const entityService = new EntityService();
