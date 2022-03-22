@@ -1,0 +1,29 @@
+.table {
+  width: auto;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table_body {
+  text-align: center;
+}
+
+.table_row td:last-child {
+  border: 0px solid white;
+  color:red
+}
+
+.table_body td {
+  border: 2px solid black;
+  min-width: 200px;
+}
+
+.table_header{
+  font-weight: bold;
+}
+
+.table_row>:last-child{
+width:300px;
+display: flex;
+justify-content: space-around;
+}
